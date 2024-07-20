@@ -4,6 +4,7 @@ import json
 import argparse
 from pydub import AudioSegment
 import tempfile
+import os
 
 # Load and preprocess audio samples
 def load_audio_samples(json_file):
@@ -56,8 +57,23 @@ def match_sample(file_path, fingerprints):
     
     distances = {sample_id: np.linalg.norm(fingerprint["mfcc"] - mfcc_mean) for sample_id, fingerprint in fingerprints.items()}
     best_match_id = min(distances, key=distances.get)
+    best_distance = distances[best_match_id]
     
-    return best_match_id, fingerprints[best_match_id]
+    # Compute confidence as an example (lower distance means higher confidence)
+    total_distance = sum(distances.values())
+    confidence = 1 - (best_distance / total_distance) if total_distance > 0 else 0
+    
+    return best_match_id, fingerprints[best_match_id], confidence
+
+# Bulk match audio samples
+def bulk_match(directory, fingerprints):
+    results = []
+    for filename in os.listdir(directory):
+        if filename.endswith('.wav') or filename.endswith('.m4a'):
+            file_path = os.path.join(directory, filename)
+            best_match_id, best_match_info, confidence = match_sample(file_path, fingerprints)
+            results.append((filename, best_match_id, best_match_info['name'], confidence))
+    return results
 
 # Show fingerprints
 def show_fingerprints(fingerprints_file):
@@ -68,10 +84,11 @@ def show_fingerprints(fingerprints_file):
 # Command-line interface
 def main():
     parser = argparse.ArgumentParser(description='Voice Recognition System')
-    parser.add_argument('--action', required=True, choices=['learn', 'recognize', 'show_fingerprints'], help='Action to perform')
+    parser.add_argument('--action', required=True, choices=['learn', 'recognize', 'bulk_match', 'show_fingerprints'], help='Action to perform')
     parser.add_argument('--input_samples', help='JSON file with input audio samples for learning')
     parser.add_argument('--fingerprint_output', help='Output JSON file for saving fingerprints')
     parser.add_argument('--match_sample', help='Audio sample file for recognition')
+    parser.add_argument('--bulk_match', help='Directory with audio files for bulk recognition')
     parser.add_argument('--matched_fingerprints', help='JSON file with saved fingerprints for recognition')
     
     args = parser.parse_args()
@@ -89,8 +106,17 @@ def main():
             print("Please provide both --match_sample and --matched_fingerprints for recognition action.")
             return
         fingerprints = load_fingerprints(args.matched_fingerprints)
-        best_match_id, best_match_info = match_sample(args.match_sample, fingerprints)
-        print(f"Best Match ID: {best_match_id}, Name: {best_match_info['name']}")
+        best_match_id, best_match_info, confidence = match_sample(args.match_sample, fingerprints)
+        print(f"Best Match ID: {best_match_id}, Name: {best_match_info['name']}, Confidence: {confidence:.2f}")
+    
+    elif args.action == 'bulk_match':
+        if not args.bulk_match or not args.matched_fingerprints:
+            print("Please provide both --bulk_match and --matched_fingerprints for bulk recognition action.")
+            return
+        fingerprints = load_fingerprints(args.matched_fingerprints)
+        results = bulk_match(args.bulk_match, fingerprints)
+        for filename, best_match_id, name, confidence in results:
+            print(f"File: {filename} - Best Match ID: {best_match_id} - Name: {name} - Confidence: {confidence:.2f}")
     
     elif args.action == 'show_fingerprints':
         if not args.matched_fingerprints:
