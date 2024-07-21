@@ -31,6 +31,8 @@
 
 <!-- /code_chunk_output -->
 
+---
+
 ### Basic information
 *This Python script implements a simple voice recognition system using MFCC fingerprints. It allows you to:*
 
@@ -39,6 +41,7 @@
 - **Bulk Match:** Process a directory of audio files and identify speakers for each file.
 - **Show Fingerprints:** Display the saved fingerprints for debugging or analysis.
 
+---
 
 ### Potential Use Cases
 
@@ -51,12 +54,16 @@ Discord Bot for Voice Recognition and Hate Speech Detection
 
 Integrating with Hatebase and Perspective API
 
+---
+
 #### Hatebase
 
 Hatebase is a database that tracks hate speech across different languages and regions. By integrating with Hatebase, the bot can access a comprehensive list of hate speech terms and patterns.
 
 - **API Access**: Use Hatebase's API to fetch the latest hate speech data.
 - **Analysis**: Analyze audio transcripts for matches with Hatebase data.
+
+---
 
 #### Perspective API
 
@@ -65,6 +72,8 @@ The Perspective API, developed by Jigsaw, uses machine learning to detect toxic 
 - **Transcription**: Convert audio samples to text using speech-to-text tools.
 - **Toxicity** Analysis: Use the Perspective API to score the transcribed text for hate speech and toxicity.
 - **Action**: Take action based on the toxicity score (e.g., warning, muting, or blocking the user).
+
+---
 
 #### Example Workflow for Discord Bot
 
@@ -86,6 +95,7 @@ The Perspective API, developed by Jigsaw, uses machine learning to detect toxic 
         If hate speech is detected, the bot can warn, mute, or block the user.
         The bot can also track and prevent multi-account abuse.
 
+---
 
 ### Requirements
 
@@ -94,6 +104,8 @@ The Perspective API, developed by Jigsaw, uses machine learning to detect toxic 
 - numpy
 - json
 - pydub
+
+---
 
 ### Install the prerequisites
 
@@ -106,12 +118,17 @@ or use bulk configuration files:
 pip install -r requirements.txt
 ```
 
+---
+
 ### Usage
 
 The script can be run from the command line using the following arguments:
 ```bash
 python voice_recognition.py --action <action> [--input_samples <json_file>] [--fingerprint_output <json_file>] [--match <audio_file>] [--bulk_match <directory>] [--fingerprints <json_file>]
 ```
+
+---
+
 #### Actions
 
 1. **learn**: Extract fingerprints from audio samples.
@@ -134,24 +151,34 @@ python voice_recognition.py --action <action> [--input_samples <json_file>] [--f
 ### Examples
 
 ##### 1. Learn fingerprints from samples.json and save to fingerprints.json
+
 ```bash
 python voice_recognition.py --action learn --input_samples samples.json --fingerprint_output fingerprints.json
 ```
 
 ##### 2. Recognize a new audio file
+
 ```bash
 python voice_recognition.py --action recognize --match test.wav --fingerprints fingerprints.json
 ```
+
 ##### 3. Bulk match audio files in the 'audio' directory
+
 ```bash
 python voice_recognition.py --action bulk_match --bulk_match audio --fingerprints fingerprints.json
 ```
+
 ##### 4. Show saved fingerprints
+
 ```bash
 python voice_recognition.py --action show_fingerprints --fingerprints fingerprints.json
 ```
+
+---
+
 ### Input JSON Format
 The --input_samples argument expects a JSON file with the following structure:
+
 ```json
 {
   "person_id1": {
@@ -171,6 +198,8 @@ The --input_samples argument expects a JSON file with the following structure:
 }
 ```
 
+---
+
 ### ToDo's
 - [X] Basic functionality - to learn and to recognize
 - [ ] Database to keep data
@@ -180,10 +209,13 @@ The --input_samples argument expects a JSON file with the following structure:
 - [ ] Integration with Hatedatabase
 - [ ] Integration with Perspective AI
 - [ ] Many, many, many more...
+---
 
 ### DISCLIMER
 
 *Make sure, that You using voice samples within law of Your country. I am NOT responsible for misusage*
+
+---
 
 ### Notes
 
@@ -191,6 +223,8 @@ The script uses MFCC features for fingerprint extraction.
 The confidence score is a simple measure based on the distance between MFCC vectors.
 The script supports both WAV and M4A audio files.
 The pydub library is used to convert M4A files to WAV for compatibility with librosa.
+
+---
 
 ### License
 
