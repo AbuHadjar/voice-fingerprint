@@ -1,14 +1,6 @@
 # Voice Fingerprinting System 
 
 ***
-*This Python script implements a simple voice recognition system using MFCC fingerprints. It allows you to:*
-
-- **Learn:** Extract MFCC fingerprints from audio samples and save them to a JSON file.
-- **Match:** Match a new audio sample against saved fingerprints to identify the speaker.
-- **Bulk Match:** Process a directory of audio files and identify speakers for each file.
-- **Show Fingerprints:** Display the saved fingerprints for debugging or analysis.
-
-
 ### List of Contents
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
@@ -17,6 +9,11 @@
 
 - [Voice Fingerprinting System](#voice-fingerprinting-system)
     - [List of Contents](#list-of-contents)
+    - [Basic information](#basic-information)
+    - [Potential Use Cases](#potential-use-cases)
+      - [Hatebase](#hatebase)
+      - [Perspective API](#perspective-api)
+      - [Example Workflow for Discord Bot](#example-workflow-for-discord-bot)
     - [Requirements](#requirements)
     - [Install the prerequisites](#install-the-prerequisites)
     - [Usage](#usage)
@@ -26,12 +23,69 @@
         - [2. Recognize a new audio file](#2-recognize-a-new-audio-file)
         - [3. Bulk match audio files in the 'audio' directory](#3-bulk-match-audio-files-in-the-audio-directory)
         - [4. Show saved fingerprints](#4-show-saved-fingerprints)
-        - [5. Input JSON Format](#5-input-json-format)
+    - [Input JSON Format](#input-json-format)
+    - [ToDo's](#todos)
     - [DISCLIMER](#disclimer)
     - [Notes](#notes)
     - [License](#license)
 
 <!-- /code_chunk_output -->
+
+### Basic information
+*This Python script implements a simple voice recognition system using MFCC fingerprints. It allows you to:*
+
+- **Learn:** Extract MFCC fingerprints from audio samples and save them to a JSON file.
+- **Match:** Match a new audio sample against saved fingerprints to identify the speaker.
+- **Bulk Match:** Process a directory of audio files and identify speakers for each file.
+- **Show Fingerprints:** Display the saved fingerprints for debugging or analysis.
+
+
+### Potential Use Cases
+
+This system can be part of a larger ecosystem, such as:
+Discord Bot for Voice Recognition and Hate Speech Detection
+
+1. **Voice Recognition**: The bot can recognize users by their voice, even across multiple accounts, using the MFCC fingerprints.
+2. **Hate Speech Detection**: Integrate with databases like Hatebase or APIs like the Perspective API to analyze voice content for hate speech.
+3. **Account Management**: Automatically mute or block users identified as engaging in hate speech, and prevent multi-account abuse.
+
+Integrating with Hatebase and Perspective API
+
+#### Hatebase
+
+Hatebase is a database that tracks hate speech across different languages and regions. By integrating with Hatebase, the bot can access a comprehensive list of hate speech terms and patterns.
+
+- **API Access**: Use Hatebase's API to fetch the latest hate speech data.
+- **Analysis**: Analyze audio transcripts for matches with Hatebase data.
+
+#### Perspective API
+
+The Perspective API, developed by Jigsaw, uses machine learning to detect toxic language in text. It can be adapted to work with transcriptions of audio samples.
+
+- **Transcription**: Convert audio samples to text using speech-to-text tools.
+- **Toxicity** Analysis: Use the Perspective API to score the transcribed text for hate speech and toxicity.
+- **Action**: Take action based on the toxicity score (e.g., warning, muting, or blocking the user).
+
+#### Example Workflow for Discord Bot
+
+-> User Joins Voice Channel:
+        The bot starts recording the user's speech.
+
+-> Voice Recognition:
+        Extract MFCC fingerprints from the user's speech.
+        Match against known fingerprints to identify the user.
+
+-> Speech Transcription:
+        Convert the recorded speech to text using a speech-to-text service.
+
+-> Hate Speech Analysis:
+        Analyze the transcribed text using Hatebase and the Perspective API.
+        Determine the toxicity score and identify any hate speech.
+
+-> Action:
+        If hate speech is detected, the bot can warn, mute, or block the user.
+        The bot can also track and prevent multi-account abuse.
+
 
 ### Requirements
 
@@ -96,7 +150,7 @@ python voice_recognition.py --action bulk_match --bulk_match audio --fingerprint
 ```bash
 python voice_recognition.py --action show_fingerprints --fingerprints fingerprints.json
 ```
-##### 5. Input JSON Format
+### Input JSON Format
 The --input_samples argument expects a JSON file with the following structure:
 ```json
 {
@@ -116,6 +170,16 @@ The --input_samples argument expects a JSON file with the following structure:
   }
 }
 ```
+
+### ToDo's
+- [X] Basic functionality - to learn and to recognize
+- [ ] Database to keep data
+- [ ] More ways to retrive audio samples
+- [ ] Django web frontend
+- [ ] Transcripting
+- [ ] Integration with Hatedatabase
+- [ ] Integration with Perspective AI
+- [ ] Many, many, many more...
 
 ### DISCLIMER
 
