@@ -47,7 +47,7 @@ def load_fingerprints(fingerprints_file):
     return {k: {"name": v["name"], "mfcc": np.array(v["mfcc"])} for k, v in fingerprints.items()}
 
 # Match a new audio sample against saved fingerprints
-def match_sample(file_path, fingerprints):
+def match(file_path, fingerprints):
     if file_path.endswith('.m4a'):
         y, sr = load_m4a(file_path)
     else:
@@ -71,7 +71,7 @@ def bulk_match(directory, fingerprints):
     for filename in os.listdir(directory):
         if filename.endswith('.wav') or filename.endswith('.m4a'):
             file_path = os.path.join(directory, filename)
-            best_match_id, best_match_info, confidence = match_sample(file_path, fingerprints)
+            best_match_id, best_match_info, confidence = match(file_path, fingerprints)
             results.append((filename, best_match_id, best_match_info['name'], confidence))
     return results
 
@@ -87,9 +87,9 @@ def main():
     parser.add_argument('--action', required=True, choices=['learn', 'recognize', 'bulk_match', 'show_fingerprints'], help='Action to perform')
     parser.add_argument('--input_samples', help='JSON file with input audio samples for learning')
     parser.add_argument('--fingerprint_output', help='Output JSON file for saving fingerprints')
-    parser.add_argument('--match_sample', help='Audio sample file for recognition')
+    parser.add_argument('--match', help='Audio sample file for recognition')
     parser.add_argument('--bulk_match', help='Directory with audio files for bulk recognition')
-    parser.add_argument('--matched_fingerprints', help='JSON file with saved fingerprints for recognition')
+    parser.add_argument('--fingerprints', help='JSON file with saved fingerprints for recognition')
     
     args = parser.parse_args()
     
@@ -102,27 +102,27 @@ def main():
         print(f"Fingerprints saved to {args.fingerprint_output}")
     
     elif args.action == 'recognize':
-        if not args.match_sample or not args.matched_fingerprints:
-            print("Please provide both --match_sample and --matched_fingerprints for recognition action.")
+        if not args.match or not args.fingerprints:
+            print("Please provide both --match and --fingerprints for recognition action.")
             return
-        fingerprints = load_fingerprints(args.matched_fingerprints)
-        best_match_id, best_match_info, confidence = match_sample(args.match_sample, fingerprints)
+        fingerprints = load_fingerprints(args.fingerprints)
+        best_match_id, best_match_info, confidence = match(args.match, fingerprints)
         print(f"Best Match ID: {best_match_id}, Name: {best_match_info['name']}, Confidence: {confidence:.2f}")
     
     elif args.action == 'bulk_match':
-        if not args.bulk_match or not args.matched_fingerprints:
-            print("Please provide both --bulk_match and --matched_fingerprints for bulk recognition action.")
+        if not args.bulk_match or not args.fingerprints:
+            print("Please provide both --bulk_match and --fingerprints for bulk recognition action.")
             return
-        fingerprints = load_fingerprints(args.matched_fingerprints)
+        fingerprints = load_fingerprints(args.fingerprints)
         results = bulk_match(args.bulk_match, fingerprints)
         for filename, best_match_id, name, confidence in results:
             print(f"File: {filename} - Best Match ID: {best_match_id} - Name: {name} - Confidence: {confidence:.2f}")
     
     elif args.action == 'show_fingerprints':
-        if not args.matched_fingerprints:
-            print("Please provide --matched_fingerprints to show fingerprints.")
+        if not args.fingerprints:
+            print("Please provide --fingerprints to show fingerprints.")
             return
-        show_fingerprints(args.matched_fingerprints)
+        show_fingerprints(args.fingerprints)
 
 if __name__ == "__main__":
     main()
