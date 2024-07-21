@@ -1,4 +1,4 @@
-# Voice Fingerprinting System 
+# Voice Fingerprinting Tool 
 
 ***
 ### List of Contents
@@ -7,7 +7,7 @@
 
 <!-- code_chunk_output -->
 
-- [Voice Fingerprinting System](#voice-fingerprinting-system)
+- [Voice Fingerprinting](#voice-fingerprinting-system)
     - [List of Contents](#list-of-contents)
     - [Basic information](#basic-information)
     - [Potential Use Cases](#potential-use-cases)
@@ -34,7 +34,7 @@
 ---
 
 ### Basic information
-*This Python script implements a simple voice recognition system using MFCC fingerprints. It allows you to:*
+*This Python script implements a simple voice recognition using MFCC fingerprints. It allows you to:*
 
 - **Learn:** Extract MFCC fingerprints from audio samples and save them to a JSON file.
 - **Match:** Match a new audio sample against saved fingerprints to identify the speaker.
