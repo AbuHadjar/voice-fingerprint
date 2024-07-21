@@ -1,4 +1,5 @@
-# Voice Fingerprinting System {#custom-id}
+# Voice Fingerprinting System 
+
 ***
 *This Python script implements a simple voice recognition system using MFCC fingerprints. It allows you to:*
 
@@ -7,27 +8,26 @@
 - **Bulk Match:** Process a directory of audio files and identify speakers for each file.
 - **Show Fingerprints:** Display the saved fingerprints for debugging or analysis.
 
-##### DISCLIMER: 
-*Make sure, that You using voice samples within law of Your country.*
 
 ### List of Contents
+
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [Voice Fingerprinting System](#custom-id)
-        - [DISCLIMER:](#disclimer)
+- [Voice Fingerprinting System](#voice-fingerprinting-system)
     - [List of Contents](#list-of-contents)
     - [Requirements](#requirements)
-    - [Install the prerequisites:](#install-the-prerequisites)
+    - [Install the prerequisites](#install-the-prerequisites)
     - [Usage](#usage)
       - [Actions](#actions)
-    - [Examples:](#examples)
-      - [Learn fingerprints from samples.json and save to fingerprints.json](#learn-fingerprints-from-samplesjson-and-save-to-fingerprintsjson)
-      - [Recognize a new audio file](#recognize-a-new-audio-file)
-      - [Bulk match audio files in the 'audio' directory](#bulk-match-audio-files-in-the-audio-directory)
-      - [Show saved fingerprints](#show-saved-fingerprints)
-      - [Input JSON Format](#input-json-format)
+    - [Examples](#examples)
+        - [1. Learn fingerprints from samples.json and save to fingerprints.json](#1-learn-fingerprints-from-samplesjson-and-save-to-fingerprintsjson)
+        - [2. Recognize a new audio file](#2-recognize-a-new-audio-file)
+        - [3. Bulk match audio files in the 'audio' directory](#3-bulk-match-audio-files-in-the-audio-directory)
+        - [4. Show saved fingerprints](#4-show-saved-fingerprints)
+        - [5. Input JSON Format](#5-input-json-format)
+    - [DISCLIMER](#disclimer)
     - [Notes](#notes)
     - [License](#license)
 
@@ -41,53 +41,62 @@
 - json
 - pydub
 
-### Install the prerequisites:
+### Install the prerequisites
 
+install manually:
 ```bash
 pip install librosa numpy json pydub
 ```
+or use bulk configuration files:
+```bash
+pip install -r requirements.txt
+```
+
 ### Usage
+
 The script can be run from the command line using the following arguments:
 ```bash
 python voice_recognition.py --action <action> [--input_samples <json_file>] [--fingerprint_output <json_file>] [--match <audio_file>] [--bulk_match <directory>] [--fingerprints <json_file>]
 ```
 #### Actions
 
-**learn**: Extract fingerprints from audio samples.
+1. **learn**: Extract fingerprints from audio samples.
 : **--input_samples**: Path to a JSON file containing audio sample information.
 : **--fingerprint_output**: Path to the output JSON file for saving fingerprints.
 
-**recognize**: Match a new audio sample against saved fingerprints.
+2. **recognize**: Match a new audio sample against saved fingerprints.
 : **--match**: Path to the audio file to be recognized.
 : **--fingerprints**: Path to the JSON file containing saved fingerprints.
 
-**bulk_match**: Process a directory of audio files and identify speakers.
+3. **bulk_match**: Process a directory of audio files and identify speakers.
 : **--bulk_match**: Path to the directory containing audio files.
 : **--fingerprints**: Path to the JSON file containing saved fingerprints.
 
-**show_fingerprints**: Display the saved fingerprints.
+4. **show_fingerprints**: Display the saved fingerprints.
 : **--fingerprints**: Path to the JSON file containing saved fingerprints.
 
-### Examples:
+---
 
-#### Learn fingerprints from samples.json and save to fingerprints.json
+### Examples
+
+##### 1. Learn fingerprints from samples.json and save to fingerprints.json
 ```bash
 python voice_recognition.py --action learn --input_samples samples.json --fingerprint_output fingerprints.json
 ```
 
-#### Recognize a new audio file
+##### 2. Recognize a new audio file
 ```bash
 python voice_recognition.py --action recognize --match test.wav --fingerprints fingerprints.json
 ```
-#### Bulk match audio files in the 'audio' directory
+##### 3. Bulk match audio files in the 'audio' directory
 ```bash
 python voice_recognition.py --action bulk_match --bulk_match audio --fingerprints fingerprints.json
 ```
-#### Show saved fingerprints
+##### 4. Show saved fingerprints
 ```bash
 python voice_recognition.py --action show_fingerprints --fingerprints fingerprints.json
 ```
-#### Input JSON Format
+##### 5. Input JSON Format
 The --input_samples argument expects a JSON file with the following structure:
 ```json
 {
@@ -108,10 +117,17 @@ The --input_samples argument expects a JSON file with the following structure:
 }
 ```
 
+### DISCLIMER
+
+*Make sure, that You using voice samples within law of Your country. I am NOT responsible for misusage*
+
 ### Notes
+
 The script uses MFCC features for fingerprint extraction.
 The confidence score is a simple measure based on the distance between MFCC vectors.
 The script supports both WAV and M4A audio files.
 The pydub library is used to convert M4A files to WAV for compatibility with librosa.
+
 ### License
+
 GNU General Public License v3.0
