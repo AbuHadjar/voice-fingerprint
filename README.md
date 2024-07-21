@@ -114,4 +114,4 @@ The confidence score is a simple measure based on the distance between MFCC vect
 The script supports both WAV and M4A audio files.
 The pydub library is used to convert M4A files to WAV for compatibility with librosa.
 ### License
-This project is licensed under the MIT License.
+GNU General Public License v3.0
